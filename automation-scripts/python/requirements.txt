@@ -1,0 +1,22 @@
+# Python dependencies for automation scripts
+
+# Azure authentication
+azure-identity==1.15.0
+msal==1.26.0
+
+# HTTP requests
+requests==2.31.0
+
+# Configuration management
+python-dotenv==1.0.0
+
+# Data manipulation
+pandas==2.2.0
+
+# Logging and utilities
+colorlog==6.8.2
+pyyaml==6.0.1
+
+# Testing (optional)
+pytest==8.0.0
+pytest-cov==4.1.0
