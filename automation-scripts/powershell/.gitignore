@@ -2,3 +2,6 @@
 .env
 *.env
 !.env.example
+
+# Ignore generated CSV inventory files (will be stored in Azure Blob later)
+*.csv
