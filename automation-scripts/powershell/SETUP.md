@@ -52,11 +52,11 @@ After registration, copy the following values (you'll need these later):
 3. Select **Microsoft Graph**
 4. Select **Application permissions** (not Delegated permissions)
 5. Search for and select:
-   - `CopilotSettings.Read.All` (to read Copilot settings and agents)
+   - `CopilotPackages.Read.All` (to read Copilot packages and agents)
    
    **OR**
    
-   - `CopilotSettings.ReadWrite.All` (if you plan to add write capabilities later)
+   - `CopilotPackages.ReadWrite.All` (if you plan to add write capabilities later)
 
 6. Click **Add permissions**
 
@@ -191,7 +191,7 @@ The script automatically calculates and displays:
 - Admin consent not granted
 
 **Solution:**
-1. Verify `CopilotSettings.Read.All` permission is added in **API permissions**
+1. Verify `CopilotPackages.Read.All` permission is added in **API permissions**
 2. Ensure **Admin consent** is granted (green checkmark in Status column)
 3. Wait 5-10 minutes after granting consent for changes to propagate
 
@@ -238,7 +238,7 @@ The script currently retrieves the first page only. Pagination support can be ad
 - ❌ Never commit `.env` files to Git
 
 ### Least Privilege
-- ✅ Use `CopilotSettings.Read.All` if only reading data
+- ✅ Use `CopilotPackages.Read.All` if only reading data
 - ✅ Create dedicated service account for automation
 - ❌ Don't use personal admin accounts for automation
 - ❌ Don't grant more permissions than necessary
@@ -247,6 +247,190 @@ The script currently retrieves the first page only. Pagination support can be ad
 - ✅ Review Azure AD sign-in logs periodically
 - ✅ Monitor for unusual API activity
 - ✅ Set up alerts for failed authentication attempts
+
+---
+
+## 📦 NEW: Get-CopilotAgentsInventory.ps1 (Package Management API)
+
+### Overview
+
+**Get-CopilotAgentsInventory.ps1** is a new script that uses the **Microsoft 365 Copilot Package Management API** (Preview) instead of the generic Teams Apps API. This provides better filtering, more agent-specific metadata, and proper governance capabilities.
+
+**Key Differences from Get-CopilotAgents.ps1:**
+
+| Feature | Get-CopilotAgents.ps1 | Get-CopilotAgentsInventory.ps1(NEW) |
+|---------|----------------------|--------------------------------------|
+| API Used | Teams Apps API | Copilot Package Management API |
+| Authentication | App registration (client credentials) | Interactive user login (delegated) |
+| Setup Complexity | Higher (requires app registration) | Lower (no app registration needed) |
+| Agent Filtering | Limited | Advanced (by type, host, date) |
+| API Status | GA | Preview (/beta) |
+| License Required | Standard admin access | **Microsoft Agent 365 license** |
+| Best For | Production automation | Governance & admin tasks |
+
+### Prerequisites (Different from Get-CopilotAgents.ps1!)
+
+⚠️ **Important:** This script has different requirements:
+
+1. **Microsoft Agent 365 License** - Required for all users of this API
+2. **Admin Role** - AI Admin or Global Admin (not just app admin)
+3. **Authentication** - Uses interactive delegated auth (no app registration needed!)
+4. **Cloud** - Global commercial cloud only (not GCC, DOD, or 21Vianet)
+5. **PowerShell Module** - Microsoft.Graph.Authentication
+
+### Quick Setup
+
+#### Step 1: Verify Prerequisites
+```powershell
+# Check if you have the required admin role
+# You need AI Admin or Global Admin role
+
+# Check your cloud environment
+# Must be global commercial cloud (not sovereign cloud)
+```
+
+#### Step 2: Install Required Module
+```powershell
+# Install Microsoft Graph Authentication module
+Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -Force
+```
+
+The script will auto-install if the module is missing, but manual installation is recommended.
+
+#### Step 3: Run the Script
+```powershell
+# Navigate to the scripts directory
+cd automation-scripts/powershell
+
+# Run basic inventory (you'll be prompted to sign in)
+.\Get-CopilotAgentsInventory.ps1
+```
+
+**That's it!** No app registration, no client secrets, no .env file needed!
+
+### Usage Examples
+
+See [Get-CopilotAgentsInventory-README.md](./Get-CopilotAgentsInventory-README.md) for comprehensive documentation.
+
+**Quick examples:**
+
+```powershell
+# Get all agents and export to CSV
+.\Get-CopilotAgentsInventory.ps1 -ExportToCsv
+
+# Get only Declarative Agents on Copilot host
+.\Get-CopilotAgentsInventory.ps1 -FilterByElementType DeclarativeAgent -FilterByHost Copilot
+
+# Get agents modified in the last week
+$lastWeek = (Get-Date).AddDays(-7)
+.\Get-CopilotAgentsInventory.ps1 -ModifiedSince $lastWeek -ExportToCsv
+
+# Filter by element type
+.\Get-CopilotAgentsInventory.ps1 -FilterByElementType CustomEngineAgent
+```
+
+### Why Use This Script?
+
+✅ **Better Agent Filtering**
+- Filter by DeclarativeAgent, CustomEngineAgent, or Bots
+- Filter by host surface (Copilot, Teams, Outlook, M365)
+- Filter by modification date for change detection
+
+✅ **Agent-Specific Metadata**
+- `elementTypes` - Know exactly what type of agent it is
+- `isBlocked` - See blocked status directly
+- `availableTo` / `deployedTo` - Understand deployment scope
+- Better governance properties
+
+✅ **Easier Setup**
+- No app registration required
+- No client secrets to manage
+- No .env file configuration
+- Interactive login with MFA support
+
+✅ **Governance-Focused**
+- Built specifically for Copilot agent inventory
+- Identifies tenant-wide packages automatically
+- Change detection capabilities
+- Export for compliance reporting
+
+### Limitations (Preview API)
+
+⚠️ **Be aware:**
+
+- API is in `/beta` - not supported for production automation (yet)
+- Requires Microsoft Agent 365 license (verify with your Microsoft account team)
+- Delegated auth only - can't run as unattended service principal for read operations
+- Global commercial cloud only
+- API may change before reaching GA
+
+### Which Script Should I Use?
+
+**Use Get-CopilotAgentsInventory.ps1 (NEW) if:**
+- ✅ You have Microsoft Agent 365 license
+- ✅ You need agent-specific filtering (DeclarativeAgent, CustomEngineAgent, etc.)
+- ✅ You're doing governance and audit tasks
+- ✅ You want easier setup (no app registration)
+- ✅ You can run interactively (delegated auth)
+- ✅ You're okay with preview API
+
+**Use Get-CopilotAgents.ps1 (ORIGINAL) if:**
+- ✅ You need production-grade automation
+- ✅ You need unattended/scheduled execution
+- ✅ You don't have Microsoft Agent 365 license
+- ✅ You need GA-supported API
+- ✅ You're in sovereign cloud (GCC, DOD)
+
+**Use Both:**
+- Get-CopilotAgentsInventory.ps1 for detailed governance reviews
+- Get-CopilotAgents.ps1 for automated daily/weekly checks
+
+### Troubleshooting
+
+#### 403 Access Denied
+
+Most common cause: **Missing Microsoft Agent 365 license**
+
+Check in this order:
+1. Verify Microsoft Agent 365 license assignment
+2. Verify AI Admin or Global Admin role
+3. Verify you're on global commercial cloud
+4. Check Graph permission consent (script prompts automatically)
+
+#### Module Not Found
+
+```powershell
+Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -Force
+```
+
+#### No Packages Found
+
+- Verify agents exist in your tenant
+- Try without filters: `.\Get-CopilotAgentsInventory.ps1`
+- Check Agent Registry UI in M365 admin center
+
+### Documentation
+
+For complete documentation, see:
+- [Get-CopilotAgentsInventory-README.md](./Get-CopilotAgentsInventory-README.md) - Full documentation
+- [QUICK-REFERENCE.md](./QUICK-REFERENCE.md) - Quick reference guide
+- [Original Article](https://spknowledge.com/2026/08/24/microsoft-365-copilot-package-management-api/)
+
+---
+
+## Summary: Script Comparison
+
+| Aspect | Get-CopilotAgents.ps1 | Get-CopilotAgentsInventory.ps1 |
+|--------|----------------------|-------------------------------|
+| **Setup** | Complex (app reg + secrets) | Simple (just install module) |
+| **Authentication** | Client credentials (app) | Interactive (delegated) |
+| **License** | Standard admin | **Microsoft Agent 365** |
+| **API** | Teams Apps (GA) | Copilot Packages (Preview) |
+| **Filtering** | Basic | Advanced (type, host, date) |
+| **Automation** | Yes (unattended) | No (interactive only) |
+| **Best Use** | Production automation | Governance & audits |
+
+**Recommendation:** Start with **Get-CopilotAgentsInventory.ps1** for manual governance tasks if you have the license, and use **Get-CopilotAgents.ps1** for production automation.
 
 ## Advanced Configuration
 
@@ -322,7 +506,7 @@ $clientSecret = (Get-AzKeyVaultSecret -VaultName "YourVault" -Name "ClientSecret
 
 **Endpoint:** `GET https://graph.microsoft.com/v1.0/copilot/admin/catalog/packages`
 
-**Required Permission:** `CopilotSettings.Read.All` or `CopilotSettings.ReadWrite.All`
+**Required Permission:** `CopilotPackages.Read.All` or `CopilotPackages.ReadWrite.All`
 
 **Documentation:** [Microsoft Graph API - Copilot](https://learn.microsoft.com/en-us/graph/api/resources/copilot)
 
