@@ -1,0 +1,3 @@
+connectionReferences:
+  - connectionReferenceLogicalName: bcm_clientonboardingagent_Ph8CGC.cr.shared_commondataser.a51e67fcc03044a98cd9c290dcf3e9c5
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps

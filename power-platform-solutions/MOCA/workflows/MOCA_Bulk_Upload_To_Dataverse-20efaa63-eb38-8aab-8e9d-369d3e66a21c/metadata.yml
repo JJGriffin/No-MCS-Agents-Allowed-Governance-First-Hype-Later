@@ -1,0 +1,33 @@
+﻿jsonFileName: workflows/MOCA_Bulk_Upload_To_Dataverse-20efaa63-eb38-8aab-8e9d-369d3e66a21c/workflow.json
+workflowId: 20efaa63-eb38-8aab-8e9d-369d3e66a21c
+name: MOCA_Bulk_Upload_To_Dataverse
+type: 1
+description: 
+subprocess: false
+category: 5
+mode: 0
+scope: 4
+onDemand: false
+triggerOnCreate: false
+triggerOnDelete: false
+asyncAutodelete: false
+syncWorkflowLogOnFailure: false
+stateCode: 1
+statusCode: 2
+runAs: 1
+isTransacted: true
+introducedVersion: 1.0.0.0
+isCustomizable:
+  value: true
+  canBeChanged: true
+  managedPropertyLogicalName: iscustomizableanddeletable
+businessProcessType: 0
+isCustomProcessingStepAllowedForOtherPublishers:
+  value: true
+  canBeChanged: true
+  managedPropertyLogicalName: canbedeleted
+modernFlowType: 1
+primaryEntity: none
+connectionReferences:
+- new_sharedazureblob_83b7643f
+- new_sharedcommondataserviceforapps_461d8cbe

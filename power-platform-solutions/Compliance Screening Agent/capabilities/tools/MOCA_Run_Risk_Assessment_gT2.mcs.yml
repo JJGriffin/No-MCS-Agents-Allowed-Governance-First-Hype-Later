@@ -1,0 +1,20 @@
+mcs.metadata:
+  componentName: MOCA_Run_Risk_Assessment
+kind: WorkflowTool
+workflowId: 7c643905-3743-4bd7-e8f0-d9b0d72ec69a
+toolInputs:
+  - name: text
+    displayName: CompanyName
+    description: Please enter your input
+
+toolOutputs:
+  - name: text
+    displayName: RiskScore
+
+  - name: text_1
+    displayName: RiskCategory
+
+connectionProperties:
+  $kind: ConnectionProperties
+  diagnostics:
+  mode: Invoker

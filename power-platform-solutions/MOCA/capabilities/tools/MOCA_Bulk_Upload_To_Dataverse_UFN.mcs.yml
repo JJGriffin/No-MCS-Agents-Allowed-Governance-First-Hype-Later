@@ -1,0 +1,35 @@
+mcs.metadata:
+  componentName: MOCA_Bulk_Upload_To_Dataverse
+  description: |-
+    Use this tool only when a user wants to perform mass onboarding of multiple entities using a CSV file.
+
+    Invoke this tool when the user uploads, attaches, or references a CSV file containing one or more entities to be onboarded for KYC processing.
+
+    The CSV is expected to contain entity information such as:
+    - Entity Name
+    - Entity Type
+    - Jurisdiction
+
+    Do not use this tool for:
+    - Single entity onboarding
+    - General KYC questions
+    - Status enquiries
+    - Case updates
+    - Individual customer registration
+
+    After processing, the tool creates KYC case records in Dataverse and returns the status.
+kind: WorkflowTool
+workflowId: 20efaa63-eb38-8aab-8e9d-369d3e66a21c
+toolInputs:
+  - name: file
+    displayName: UploadedFile
+    description: Please select a file or image
+
+toolOutputs:
+  - name: text
+    displayName: Status
+
+connectionProperties:
+  $kind: ConnectionProperties
+  diagnostics:
+  mode: Invoker

@@ -1,0 +1,6 @@
+mcs.metadata:
+  componentName: InvokeAgent.api-version
+kind: AgentVariable
+name: InvokeAgent.api-version
+type: "{\"type\":\"string\",\"title\":\"API version\",\"description\":\"API version\",\"default\":\"2025-11-15-preview\",\"enum\":[\"2025-11-15-preview\"],\"x-ms-property-name-alias\":\"api-version\"}"
+defaultValue: 2025-11-15-preview

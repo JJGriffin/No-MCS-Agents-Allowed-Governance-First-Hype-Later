@@ -1,0 +1,31 @@
+﻿jsonFileName: workflows/MOCA_Run_Company_Verification-a200dac7-cad3-abc0-6ad3-27e31e51aae7/workflow.json
+workflowId: a200dac7-cad3-abc0-6ad3-27e31e51aae7
+name: MOCA_Run_Company_Verification
+type: 1
+description: 
+subprocess: false
+category: 5
+mode: 0
+scope: 4
+onDemand: false
+triggerOnCreate: false
+triggerOnDelete: false
+asyncAutodelete: false
+syncWorkflowLogOnFailure: false
+stateCode: 1
+statusCode: 2
+runAs: 1
+isTransacted: true
+introducedVersion: 1.0.0.0
+isCustomizable:
+  value: true
+  canBeChanged: true
+  managedPropertyLogicalName: iscustomizableanddeletable
+businessProcessType: 0
+isCustomProcessingStepAllowedForOtherPublishers:
+  value: true
+  canBeChanged: true
+  managedPropertyLogicalName: canbedeleted
+modernFlowType: 1
+primaryEntity: none
+connectionReferences: []

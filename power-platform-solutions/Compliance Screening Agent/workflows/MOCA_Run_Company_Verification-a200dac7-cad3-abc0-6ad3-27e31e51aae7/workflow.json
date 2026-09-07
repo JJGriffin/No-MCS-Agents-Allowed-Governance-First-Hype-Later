@@ -1,0 +1,801 @@
+﻿{
+  "properties": {
+    "connectionReferences": {},
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "CompanyName",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "metadata": {
+            "associatedData": {
+              "graph": {
+                "name": "MOCA_Run_Company_Verification",
+                "nodes": [
+                  {
+                    "id": "start-5ee2d42e-3489-412e-a3ad-0f9cbd88060a",
+                    "name": "When an agent calls the flow",
+                    "type": "start",
+                    "version": 1,
+                    "position": {
+                      "x": 250,
+                      "y": 514
+                    },
+                    "data": {
+                      "config": {
+                        "triggerType": "connector",
+                        "connector": {
+                          "apiName": "Skills",
+                          "operationName": "When_an_agent_calls_the_flow",
+                          "displayName": "When an agent calls the flow",
+                          "kind": "Skills",
+                          "inputs": {
+                            "schema": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "title": "CompanyName",
+                                  "type": "string",
+                                  "x-ms-content-hint": "TEXT",
+                                  "x-ms-dynamically-added": true,
+                                  "description": "Please enter your input"
+                                }
+                              },
+                              "required": [
+                                "text"
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Trigger output (schema determined by connector)"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 261,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-b2799c90-fdfd-4361-b0d9-c97b68f433ab",
+                    "name": "Respond to the agent",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 2014,
+                      "y": 514
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "response",
+                        "operationName": "response",
+                        "displayName": "Respond to the agent",
+                        "category": "request",
+                        "categoryDisplayName": "Request",
+                        "iconUri": "",
+                        "brandColor": "",
+                        "parameters": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "title": "companyNumber",
+                                "type": "string",
+                                "x-ms-content-hint": "TEXT",
+                                "x-ms-dynamically-added": true
+                              },
+                              "text_1": {
+                                "title": "incorporationDate",
+                                "type": "string",
+                                "x-ms-content-hint": "TEXT",
+                                "x-ms-dynamically-added": true
+                              },
+                              "text_2": {
+                                "title": "companyStatus",
+                                "type": "string",
+                                "x-ms-content-hint": "TEXT",
+                                "x-ms-dynamically-added": true
+                              },
+                              "text_3": {
+                                "title": "registeredAddress",
+                                "type": "string",
+                                "x-ms-content-hint": "TEXT",
+                                "x-ms-dynamically-added": true
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "text_1",
+                              "text_2",
+                              "text_3"
+                            ]
+                          },
+                          "body": {
+                            "text": "@{variables(\u0027companyNumber\u0027)}",
+                            "text_1": "@{variables(\u0027incorporationDate\u0027)}",
+                            "text_2": "@{variables(\u0027companyStatus\u0027)}",
+                            "text_3": "@{variables(\u0027registeredAddress\u0027)}"
+                          }
+                        },
+                        "description": "Respond to the calling agent with typed outputs.",
+                        "kind": "Skills"
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-3ff31360-b2dc-4da3-b6ce-05e835c0704c",
+                    "name": "HTTP",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 966,
+                      "y": 514
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "httpaction",
+                        "operationName": "httpaction",
+                        "displayName": "HTTP",
+                        "category": "providers/Microsoft.ProcessSimple/operationGroups/Http",
+                        "categoryDisplayName": "HTTP",
+                        "iconUri": "https://logicappsv2resources.blob.core.windows.net/icons/http.svg",
+                        "brandColor": "#709727",
+                        "parameters": {
+                          "method": "GET",
+                          "uri": "https://api.company-information.service.gov.uk/search/companies",
+                          "headers": {
+                            "Authorization": "@{outputs(\u0027builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0\u0027)}"
+                          },
+                          "queries": {
+                            "q": "@{triggerOutputs()?[\u0027body/text\u0027]}"
+                          }
+                        },
+                        "description": "Make an HTTP request to any endpoint.",
+                        "parametersSchema": {
+                          "type": "object",
+                          "required": [
+                            "method",
+                            "uri"
+                          ],
+                          "properties": {
+                            "method": {
+                              "type": "string",
+                              "title": "Method",
+                              "description": "HTTP method",
+                              "enum": [
+                                "GET",
+                                "POST",
+                                "PUT",
+                                "PATCH",
+                                "DELETE",
+                                "HEAD",
+                                "OPTIONS"
+                              ],
+                              "default": "GET"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "title": "URI",
+                              "description": "Request URL"
+                            },
+                            "headers": {
+                              "type": "object",
+                              "title": "Headers",
+                              "description": "Request headers"
+                            },
+                            "queries": {
+                              "type": "object",
+                              "title": "Queries",
+                              "description": "Query parameters"
+                            },
+                            "body": {
+                              "title": "Body",
+                              "description": "Request body"
+                            },
+                            "authentication": {
+                              "type": "object",
+                              "title": "Authentication",
+                              "description": "Authentication configuration"
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36",
+                    "name": "Parse JSON",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 1316,
+                      "y": 514
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "parsejson",
+                        "operationName": "parsejson",
+                        "displayName": "Parse JSON",
+                        "category": "providers/Microsoft.ProcessSimple/operationGroups/DataOperation",
+                        "categoryDisplayName": "Data Operations",
+                        "iconUri": "https://logicappsv2resources.blob.core.windows.net/icons/compose.svg",
+                        "brandColor": "#8c6cff",
+                        "parameters": {
+                          "content": "@{body(\u0027builtinFunction-3ff31360-b2dc-4da3-b6ce-05e835c0704c\u0027)}",
+                          "schema": "{\n    \u0022etag\u0022: \u0022string\u0022,\n    \u0022items\u0022: [\n        {\n            \u0022address\u0022: {\n                \u0022address_line_1\u0022: \u0022string\u0022,\n                \u0022address_line_2\u0022: \u0022string\u0022,\n                \u0022care_of\u0022: \u0022string\u0022,\n                \u0022country\u0022: \u0022string\u0022,\n                \u0022locality\u0022: \u0022string\u0022,\n                \u0022po_box\u0022: \u0022string\u0022,\n                \u0022postal_code\u0022: \u0022string\u0022,\n                \u0022region\u0022: \u0022string\u0022\n            },\n            \u0022address_snippet\u0022: \u0022string\u0022,\n            \u0022company_number\u0022: \u0022string\u0022,\n            \u0022company_status\u0022: \u0022string\u0022,\n            \u0022company_type\u0022: \u0022string\u0022,\n            \u0022date_of_cessation\u0022: \u0022date\u0022,\n            \u0022date_of_creation\u0022: \u0022date\u0022,\n            \u0022description\u0022: \u0022string\u0022,\n            \u0022description_identifier\u0022: [\n                \u0022string\u0022\n            ],\n            \u0022kind\u0022: \u0022string\u0022,\n            \u0022links\u0022: {\n                \u0022self\u0022: \u0022string\u0022\n            },\n            \u0022matches\u0022: {\n                \u0022address_snippet\u0022: [\n                    \u0022integer\u0022\n                ],\n                \u0022snippet\u0022: [\n                    \u0022integer\u0022\n                ],\n                \u0022title\u0022: [\n                    \u0022integer\u0022\n                ]\n            },\n            \u0022snippet\u0022: \u0022string\u0022,\n            \u0022title\u0022: \u0022string\u0022\n        }\n    ],\n    \u0022items_per_page\u0022: \u0022integer\u0022,\n    \u0022kind\u0022: \u0022string\u0022,\n    \u0022start_index\u0022: \u0022integer\u0022,\n    \u0022total_results\u0022: \u0022integer\u0022\n}"
+                        },
+                        "description": "Parse JSON content to make it easier to access properties.",
+                        "parametersSchema": {
+                          "type": "object",
+                          "required": [
+                            "content"
+                          ],
+                          "properties": {
+                            "content": {
+                              "type": "string",
+                              "format": "textarea",
+                              "title": "Content",
+                              "description": "JSON content to parse"
+                            },
+                            "schema": {
+                              "type": "object",
+                              "x-ms-editor": "schema",
+                              "x-ms-visibility": "important",
+                              "title": "Schema",
+                              "description": "JSON schema for the content"
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "variable-8cd66eef-da60-4bfe-b66e-0c9d0cc6276d",
+                    "name": "Variable",
+                    "type": "variable",
+                    "version": 1,
+                    "position": {
+                      "x": 1632,
+                      "y": 514
+                    },
+                    "data": {
+                      "config": {
+                        "assignments": [
+                          {
+                            "id": "7f1f78dc-cd03-4c9d-b2d3-fc1cbe60a1e4",
+                            "variableName": "companyNumber",
+                            "mode": "initialize",
+                            "type": "string",
+                            "value": "@{if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_number\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_number\u0027]\r\n)}",
+                            "valueRich": {
+                              "segments": [
+                                {
+                                  "type": "token",
+                                  "value": "@{if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_number\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_number\u0027]\r\n)}",
+                                  "tokenRef": {
+                                    "type": "function",
+                                    "stepId": "function",
+                                    "stepName": "Logical",
+                                    "outputName": "if",
+                                    "outputType": "any",
+                                    "functionName": "if",
+                                    "functionCategory": "logical",
+                                    "rawExpression": "if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_number\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_number\u0027]\r\n)"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "1162337c-4cb7-4b41-a529-02809eecc1e6",
+                            "variableName": "companyStatus",
+                            "mode": "initialize",
+                            "type": "string",
+                            "value": "@{if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_status\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_status\u0027]\r\n)}",
+                            "valueRich": {
+                              "segments": [
+                                {
+                                  "type": "token",
+                                  "value": "@{if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_status\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_status\u0027]\r\n)}",
+                                  "tokenRef": {
+                                    "type": "function",
+                                    "stepId": "function",
+                                    "stepName": "Logical",
+                                    "outputName": "if",
+                                    "outputType": "any",
+                                    "functionName": "if",
+                                    "functionCategory": "logical",
+                                    "rawExpression": "if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_status\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027company_status\u0027]\r\n)"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "d4b47768-4c9f-41a7-8aa9-14da0a7b421d",
+                            "variableName": "incorporationDate",
+                            "mode": "initialize",
+                            "type": "string",
+                            "value": "@{if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027date_of_creation\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027date_of_creation\u0027]\r\n)}",
+                            "valueRich": {
+                              "segments": [
+                                {
+                                  "type": "token",
+                                  "value": "@{if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027date_of_creation\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027date_of_creation\u0027]\r\n)}",
+                                  "tokenRef": {
+                                    "type": "function",
+                                    "stepId": "function",
+                                    "stepName": "Logical",
+                                    "outputName": "if",
+                                    "outputType": "any",
+                                    "functionName": "if",
+                                    "functionCategory": "logical",
+                                    "rawExpression": "if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027date_of_creation\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027date_of_creation\u0027]\r\n)"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "3dff004a-6a5e-4ef8-bfab-26eee8008519",
+                            "variableName": "registeredAddress",
+                            "mode": "initialize",
+                            "type": "string",
+                            "value": "@{if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027address_snippet\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027address_snippet\u0027]\r\n)}",
+                            "valueRich": {
+                              "segments": [
+                                {
+                                  "type": "token",
+                                  "value": "@{if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027address_snippet\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027address_snippet\u0027]\r\n)}",
+                                  "tokenRef": {
+                                    "type": "function",
+                                    "stepId": "function",
+                                    "stepName": "Logical",
+                                    "outputName": "if",
+                                    "outputType": "any",
+                                    "functionName": "if",
+                                    "functionCategory": "logical",
+                                    "rawExpression": "if(\r\n    or(\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027address_snippet\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36\u0027)?[\u0027items\u0027]?[0]?[\u0027address_snippet\u0027]\r\n)"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "properties": {},
+                            "description": "Variables set by this node"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0",
+                    "name": "Compose",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 616,
+                      "y": 514
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "composeNew",
+                        "operationName": "composeNew",
+                        "displayName": "Compose",
+                        "category": "providers/Microsoft.ProcessSimple/operationGroups/DataOperation",
+                        "categoryDisplayName": "Data Operations",
+                        "iconUri": "https://logicappsv2resources.blob.core.windows.net/icons/compose.svg",
+                        "brandColor": "#8c6cff",
+                        "parameters": {
+                          "inputs": "@{concat(\u0027Basic \u0027, base64(concat(\u0027REPLACE_WITH_KEYVAULT_SECRET_REFERENCE\u0027, \u0027:\u0027)))}"
+                        },
+                        "description": "Compose outputs from multiple actions into a single output.",
+                        "parametersSchema": {
+                          "type": "object",
+                          "required": [
+                            "inputs"
+                          ],
+                          "properties": {
+                            "inputs": {
+                              "type": "string",
+                              "title": "Inputs",
+                              "description": "Value to compose"
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  }
+                ],
+                "edges": [
+                  {
+                    "id": "edge-builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36-variable-8cd66eef-da60-4bfe-b66e-0c9d0cc6276d",
+                    "source": "builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36",
+                    "target": "variable-8cd66eef-da60-4bfe-b66e-0c9d0cc6276d"
+                  },
+                  {
+                    "id": "edge-variable-8cd66eef-da60-4bfe-b66e-0c9d0cc6276d-builtinFunction-b2799c90-fdfd-4361-b0d9-c97b68f433ab",
+                    "source": "variable-8cd66eef-da60-4bfe-b66e-0c9d0cc6276d",
+                    "target": "builtinFunction-b2799c90-fdfd-4361-b0d9-c97b68f433ab"
+                  },
+                  {
+                    "id": "edge-builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0-builtinFunction-3ff31360-b2dc-4da3-b6ce-05e835c0704c",
+                    "source": "builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0",
+                    "target": "builtinFunction-3ff31360-b2dc-4da3-b6ce-05e835c0704c"
+                  },
+                  {
+                    "id": "edge-start-5ee2d42e-3489-412e-a3ad-0f9cbd88060a-builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0",
+                    "source": "start-5ee2d42e-3489-412e-a3ad-0f9cbd88060a",
+                    "target": "builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0"
+                  },
+                  {
+                    "id": "edge-builtinFunction-3ff31360-b2dc-4da3-b6ce-05e835c0704c-builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36",
+                    "source": "builtinFunction-3ff31360-b2dc-4da3-b6ce-05e835c0704c",
+                    "target": "builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36"
+                  }
+                ],
+                "connectionReferences": {}
+              },
+              "nodeActionMapping": {
+                "builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0": [
+                  "Compose"
+                ],
+                "builtinFunction-3ff31360-b2dc-4da3-b6ce-05e835c0704c": [
+                  "HTTP"
+                ],
+                "builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36": [
+                  "Parse_JSON"
+                ],
+                "variable-8cd66eef-da60-4bfe-b66e-0c9d0cc6276d": [
+                  "Variable",
+                  "Variable_Init_companyStatus",
+                  "Variable_Init_incorporationDate",
+                  "Variable_Init_registeredAddress"
+                ],
+                "builtinFunction-b2799c90-fdfd-4361-b0d9-c97b68f433ab": [
+                  "Respond_to_the_agent"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "actions": {
+        "Compose": {
+          "type": "Compose",
+          "inputs": "@{concat(\u0027Basic \u0027, base64(concat(\u0027REPLACE_WITH_KEYVAULT_SECRET_REFERENCE\u0027, \u0027:\u0027)))}",
+          "metadata": {
+            "description": "Compose",
+            "nodeId": "builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0"
+          }
+        },
+        "HTTP": {
+          "type": "Http",
+          "inputs": {
+            "method": "GET",
+            "uri": "https://api.company-information.service.gov.uk/search/companies",
+            "headers": {
+              "Authorization": "@{outputs(\u0027Compose\u0027)}"
+            },
+            "queries": {
+              "q": "@{triggerOutputs()?[\u0027body/text\u0027]}"
+            }
+          },
+          "runAfter": {
+            "Compose": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "HTTP",
+            "nodeId": "builtinFunction-3ff31360-b2dc-4da3-b6ce-05e835c0704c"
+          }
+        },
+        "Parse_JSON": {
+          "type": "ParseJson",
+          "inputs": {
+            "schema": {
+              "etag": "string",
+              "items": [
+                {
+                  "address": {
+                    "address_line_1": "string",
+                    "address_line_2": "string",
+                    "care_of": "string",
+                    "country": "string",
+                    "locality": "string",
+                    "po_box": "string",
+                    "postal_code": "string",
+                    "region": "string"
+                  },
+                  "address_snippet": "string",
+                  "company_number": "string",
+                  "company_status": "string",
+                  "company_type": "string",
+                  "date_of_cessation": "date",
+                  "date_of_creation": "date",
+                  "description": "string",
+                  "description_identifier": [
+                    "string"
+                  ],
+                  "kind": "string",
+                  "links": {
+                    "self": "string"
+                  },
+                  "matches": {
+                    "address_snippet": [
+                      "integer"
+                    ],
+                    "snippet": [
+                      "integer"
+                    ],
+                    "title": [
+                      "integer"
+                    ]
+                  },
+                  "snippet": "string",
+                  "title": "string"
+                }
+              ],
+              "items_per_page": "integer",
+              "kind": "string",
+              "start_index": "integer",
+              "total_results": "integer"
+            },
+            "content": "@{body(\u0027HTTP\u0027)}"
+          },
+          "runAfter": {
+            "HTTP": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Parse JSON",
+            "nodeId": "builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36"
+          }
+        },
+        "Variable": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "companyNumber",
+                "type": "String",
+                "value": "@{if(\r\n    or(\r\n        empty(body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]?[0]?[\u0027company_number\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]?[0]?[\u0027company_number\u0027]\r\n)}"
+              }
+            ]
+          },
+          "runAfter": {
+            "Parse_JSON": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Variable",
+            "nodeId": "variable-8cd66eef-da60-4bfe-b66e-0c9d0cc6276d"
+          }
+        },
+        "Variable_Init_companyStatus": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "companyStatus",
+                "type": "String",
+                "value": "@{if(\r\n    or(\r\n        empty(body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]?[0]?[\u0027company_status\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]?[0]?[\u0027company_status\u0027]\r\n)}"
+              }
+            ]
+          },
+          "runAfter": {
+            "Variable": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Variable_Init_incorporationDate": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "incorporationDate",
+                "type": "String",
+                "value": "@{if(\r\n    or(\r\n        empty(body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]?[0]?[\u0027date_of_creation\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]?[0]?[\u0027date_of_creation\u0027]\r\n)}"
+              }
+            ]
+          },
+          "runAfter": {
+            "Variable_Init_companyStatus": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Variable_Init_registeredAddress": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "registeredAddress",
+                "type": "String",
+                "value": "@{if(\r\n    or(\r\n        empty(body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]),\r\n        empty(body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]?[0]?[\u0027address_snippet\u0027])\r\n    ),\r\n    \u0027Not Available\u0027,\r\n    body(\u0027Parse_JSON\u0027)?[\u0027items\u0027]?[0]?[\u0027address_snippet\u0027]\r\n)}"
+              }
+            ]
+          },
+          "runAfter": {
+            "Variable_Init_incorporationDate": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Respond_to_the_agent": {
+          "type": "Response",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "companyNumber",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_1": {
+                  "title": "incorporationDate",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_2": {
+                  "title": "companyStatus",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "text_3": {
+                  "title": "registeredAddress",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "text",
+                "text_1",
+                "text_2",
+                "text_3"
+              ]
+            },
+            "statusCode": 200,
+            "body": {
+              "text": "@{variables(\u0027companyNumber\u0027)}",
+              "text_1": "@{variables(\u0027incorporationDate\u0027)}",
+              "text_2": "@{variables(\u0027companyStatus\u0027)}",
+              "text_3": "@{variables(\u0027registeredAddress\u0027)}"
+            }
+          },
+          "runAfter": {
+            "Variable_Init_registeredAddress": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Respond to the agent",
+            "nodeId": "builtinFunction-b2799c90-fdfd-4361-b0d9-c97b68f433ab"
+          }
+        }
+      },
+      "outputs": {},
+      "metadata": {
+        "telemetryMetadata": {
+          "creationSource": "WorkflowDesigner",
+          "modifiedSources": "WorkflowDesigner"
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

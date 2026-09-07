@@ -1,0 +1,60 @@
+﻿{
+  "data": [
+    {
+      "object": "agent",
+      "id": "Compliance-Decision-Agent",
+      "name": "Compliance-Decision-Agent",
+      "state": "enabled",
+      "versions": {
+        "latest": {
+          "metadata": {
+            "logo": "Avatar_Default.svg",
+            "microsoft.voice-live.enabled": "false",
+            "microsoft.voice-live.configuration": "{\"session\":{\"voice\":{\"name\":\"en-US-Ava:DragonHDLatestNeural\",\"type\":\"azure-standard\",\"temperature\":0.8,\"rate\":\"1\",\"isHdVoice\":true},\"inputAudioTranscription\":{\"model\":\"azure-speech\",\"language\":\"auto-detect\"},\"turnDetection\":{\"type\":\"azure_semantic_vad\",\"endOfUtteranceDetection\":null,\"removeFillerWords\":true},\"inputAudioNoiseReduction\":null,\"inputAudioEchoCancellation\":null,\"fillerResponse\":null,\"avatar\":null,\"proactiveEngagement\":false}}",
+            "description": "",
+            "modified_at": "1788341705"
+          },
+          "object": "agent.version",
+          "id": "Compliance-Decision-Agent:2",
+          "name": "Compliance-Decision-Agent",
+          "version": "2",
+          "description": "",
+          "created_at": 1788341706,
+          "definition": {
+            "kind": "prompt",
+            "model": "gpt-5-mini",
+            "instructions": "You are a Compliance Decision Agent.\n\nYour purpose is to analyse company verification and sanctions screening results and provide a compliance recommendation.\n\nYou do not perform screening yourself.\n\nYou receive:\n- Screening results from OpenSanctions\n- Verification results from Companies House\n\nEvaluate:\n\n1. Match confidence\n2. Presence of sanctions indicators\n3. Presence of regulatory warnings\n4. Presence of enforcement actions\n5. Company verification status\n\nRisk Classification:\n\nHIGH\n- Topic contains sanction\n- Topic contains debarment\n- Topic contains corp.disqual\n- Entity appears in multiple sanctions datasets\n\nMEDIUM\n- Topic contains reg.warn\n- Topic contains reg.action\n- Topic contains export.risk\n- Enforcement datasets present\n\nLOW\n- Verified company\n- No sanctions indicators\n- No regulatory warning indicators\n\nReturn only JSON.",
+            "reasoning": {
+              "effort": "low"
+            },
+            "tools": [
+              {
+                "type": "web_search"
+              }
+            ]
+          },
+          "draft": false,
+          "status": "active",
+          "instance_identity": {
+            "principal_id": "bf88d39a-bdc4-46ad-9b69-c102828203fa",
+            "client_id": "bf88d39a-bdc4-46ad-9b69-c102828203fa"
+          },
+          "blueprint": {
+            "principal_id": "1ca03c26-5660-4940-a757-1b5147d5ac9e",
+            "client_id": "cfeb37a8-ac6d-4174-a4b6-87e29832744c"
+          },
+          "blueprint_reference": {
+            "type": "ManagedAgentIdentityBlueprint",
+            "blueprint_id": "Compliance-Decision-Agent-2680b"
+          },
+          "agent_guid": "2680bdd6-0ca2-457a-85a2-034c2e15dbc4"
+        }
+      },
+      "configuration_state": "enabled"
+    }
+  ],
+  "first_id": "Compliance-Decision-Agent",
+  "last_id": "Compliance-Decision-Agent",
+  "has_more": false,
+  "object": "list"
+}

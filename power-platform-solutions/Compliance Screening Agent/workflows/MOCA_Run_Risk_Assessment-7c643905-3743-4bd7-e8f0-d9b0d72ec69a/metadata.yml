@@ -1,0 +1,34 @@
+﻿jsonFileName: workflows/MOCA_Run_Risk_Assessment-7c643905-3743-4bd7-e8f0-d9b0d72ec69a/workflow.json
+workflowId: 7c643905-3743-4bd7-e8f0-d9b0d72ec69a
+name: MOCA_Run_Risk_Assessment
+type: 1
+description: 
+subprocess: false
+category: 5
+mode: 0
+scope: 4
+onDemand: false
+triggerOnCreate: false
+triggerOnDelete: false
+asyncAutodelete: false
+syncWorkflowLogOnFailure: false
+stateCode: 1
+statusCode: 2
+runAs: 1
+isTransacted: true
+introducedVersion: 1.0.0.0
+isCustomizable:
+  value: true
+  canBeChanged: true
+  managedPropertyLogicalName: iscustomizableanddeletable
+businessProcessType: 0
+isCustomProcessingStepAllowedForOtherPublishers:
+  value: true
+  canBeChanged: true
+  managedPropertyLogicalName: canbedeleted
+modernFlowType: 1
+primaryEntity: none
+connectionReferences:
+- bcm_sharedkeyvault_040e1
+- new_sharedcommondataserviceforapps_a10ab4f3
+- new_sharedcommondataserviceforapps_e040a712

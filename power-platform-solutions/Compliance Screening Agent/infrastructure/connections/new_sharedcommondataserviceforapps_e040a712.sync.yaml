@@ -1,0 +1,3 @@
+connectionReferences:
+  - connectionReferenceLogicalName: new_sharedcommondataserviceforapps_e040a712
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps

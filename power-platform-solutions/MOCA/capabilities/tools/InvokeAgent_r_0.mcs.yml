@@ -1,0 +1,13 @@
+mcs.metadata:
+  componentName: Invoke Agent
+  description: Invoke Agent.
+kind: ConnectorTool
+authMode: Invoker
+connectionReference: bcm_clientonboardingagent_Ph8CGC.cr.shared_azureagentservice
+connectorId: /providers/Microsoft.PowerApps/apis/shared_azureagentservice
+operationId: InvokeAgent
+toolInputs:
+  - name: api-version
+    value:
+      kind: ContextVariableReference
+      name: InvokeAgent.api-version

@@ -1,0 +1,14 @@
+mcs.metadata:
+  componentName: List rows from selected environment
+  description: List rows from a table in a Power Platform environment.
+kind: ConnectorTool
+authMode: Maker
+connectionReference: bcm_clientonboardingagent_Ph8CGC.cr.shared_commondataser.a51e67fcc03044a98cd9c290dcf3e9c5
+connectorId: /providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps
+operationId: ListRecordsWithOrganization
+toolInputs:
+  - name: organization
+    description: A365 Demos
+
+  - name: entityName
+    description: kyc_case

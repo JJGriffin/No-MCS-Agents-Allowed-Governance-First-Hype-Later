@@ -1,0 +1,3 @@
+connectionReferences:
+  - connectionReferenceLogicalName: new_sharedazureblob_83b7643f
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_azureblob

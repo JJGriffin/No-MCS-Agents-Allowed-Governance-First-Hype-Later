@@ -1,0 +1,3 @@
+connectionReferences:
+  - connectionReferenceLogicalName: bcm_clientonboardingagent_Ph8CGC.cr.shared_azureagentservice
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_azureagentservice

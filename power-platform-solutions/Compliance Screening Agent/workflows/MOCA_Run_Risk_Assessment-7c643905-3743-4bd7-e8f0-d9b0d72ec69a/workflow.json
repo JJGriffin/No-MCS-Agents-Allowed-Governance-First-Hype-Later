@@ -1,0 +1,2132 @@
+﻿{
+  "properties": {
+    "connectionReferences": {
+      "shared_keyvault": {
+        "api": {
+          "name": "shared_keyvault"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "bcm_sharedkeyvault_040e1"
+        },
+        "runtimeSource": "embedded",
+        "connectionName": "shared-keyvault-d6e1e7c4-728c-4241-a934-2b33ff34fd6d"
+      },
+      "shared_commondataserviceforapps-1": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_a10ab4f3"
+        },
+        "runtimeSource": "invoker",
+        "connectionName": "a51e67fcc03044a98cd9c290dcf3e9c5"
+      },
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_e040a712"
+        },
+        "runtimeSource": "invoker",
+        "connectionName": "shared-commondataser-2ce6e6e3-6d75-4e6a-aef9-b94dddafb890"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "CompanyName",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "metadata": {
+            "associatedData": {
+              "graph": {
+                "name": "MOCA_Run_Risk_Assessment",
+                "nodes": [
+                  {
+                    "id": "start-d2ccb2d6-0a3a-4a3b-afe1-9f520fba718c",
+                    "name": "When an agent calls the flow",
+                    "type": "start",
+                    "version": 1,
+                    "position": {
+                      "x": 250,
+                      "y": 0
+                    },
+                    "data": {
+                      "config": {
+                        "triggerType": "connector",
+                        "connector": {
+                          "apiName": "Skills",
+                          "operationName": "SkillsButton",
+                          "inputs": {
+                            "schema": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "title": "CompanyName",
+                                  "type": "string",
+                                  "x-ms-content-hint": "TEXT",
+                                  "x-ms-dynamically-added": true,
+                                  "description": "Please enter your input"
+                                }
+                              },
+                              "required": [
+                                "text"
+                              ]
+                            }
+                          },
+                          "displayName": "When an agent calls the flow",
+                          "iconUri": "https://content.powerapps.com/resource/makerx/static/pauto/images/designeroperations/mcs3.0d285cd0.svg",
+                          "brandColor": "#E5F2FE",
+                          "operationType": "Request",
+                          "kind": "Skills"
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 261,
+                      "height": 66
+                    },
+                    "selected": false
+                  },
+                  {
+                    "id": "connector-2629b2e1-a6a2-4a90-b744-968b80fa32c4",
+                    "name": "Get secret",
+                    "type": "connector",
+                    "version": 1,
+                    "position": {
+                      "x": 587,
+                      "y": 0
+                    },
+                    "data": {
+                      "config": {
+                        "apiName": "shared_keyvault",
+                        "displayName": "Azure Key Vault",
+                        "iconUri": "https://static.powerapps.com/resource/ppcr/releases/v1.0.1819/1.0.1819.4795/keyvault/icon.png",
+                        "brandColor": "",
+                        "operationName": "GetSecret",
+                        "parametersSchema": {
+                          "type": "object",
+                          "properties": {
+                            "secretName": {
+                              "type": "string",
+                              "title": "Name of the secret",
+                              "x-ms-dynamic-list": {
+                                "operationId": "ListSecrets",
+                                "parameters": {},
+                                "itemsPath": "Value",
+                                "itemValuePath": "Name",
+                                "itemTitlePath": "Name"
+                              },
+                              "description": "Name of the secret.",
+                              "minLength": 1,
+                              "x-ms-property-name-alias": "secretName"
+                            }
+                          },
+                          "required": [
+                            "secretName"
+                          ]
+                        },
+                        "operationType": "OpenApiConnection",
+                        "connectionName": "shared_keyvault",
+                        "parameters": {
+                          "secretName": "OpenSanctionsApiKey"
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "properties": {
+                              "body": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "type": "string",
+                                    "description": "Value of the secret",
+                                    "x-ms-visibility": "important",
+                                    "x-ms-property-name-alias": "body/value"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Name of the secret",
+                                    "x-ms-visibility": "important",
+                                    "x-ms-property-name-alias": "body/name"
+                                  },
+                                  "version": {
+                                    "type": "string",
+                                    "description": "Version of the secret",
+                                    "x-ms-visibility": "advanced",
+                                    "x-ms-property-name-alias": "body/version"
+                                  },
+                                  "contentType": {
+                                    "type": "string",
+                                    "description": "Content type of the secret",
+                                    "x-ms-visibility": "advanced",
+                                    "x-ms-property-name-alias": "body/contentType"
+                                  },
+                                  "isEnabled": {
+                                    "type": "boolean",
+                                    "description": "A flag indicating whether the secret is enabled",
+                                    "x-ms-visibility": "advanced",
+                                    "x-ms-property-name-alias": "body/isEnabled"
+                                  },
+                                  "createdTime": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "Time when the secret was created",
+                                    "x-ms-visibility": "advanced",
+                                    "x-ms-property-name-alias": "body/createdTime"
+                                  },
+                                  "lastUpdatedTime": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "Time when the secret was last updated",
+                                    "x-ms-visibility": "advanced",
+                                    "x-ms-property-name-alias": "body/lastUpdatedTime"
+                                  },
+                                  "validityStartTime": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "Time when the secret validity starts.",
+                                    "x-ms-visibility": "advanced",
+                                    "x-ms-property-name-alias": "body/validityStartTime"
+                                  },
+                                  "validityEndTime": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "Time when the secret validity ends.",
+                                    "x-ms-visibility": "advanced",
+                                    "x-ms-property-name-alias": "body/validityEndTime"
+                                  }
+                                },
+                                "required": [],
+                                "description": "The secret",
+                                "x-ms-property-name-alias": "body"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-ecfd575b-f4b6-4be6-ab86-00c18ae3efc2",
+                    "name": "HTTP",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 903,
+                      "y": 0
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "httpaction",
+                        "operationName": "httpaction",
+                        "displayName": "HTTP",
+                        "category": "providers/Microsoft.ProcessSimple/operationGroups/Http",
+                        "categoryDisplayName": "HTTP",
+                        "iconUri": "https://logicappsv2resources.blob.core.windows.net/icons/http.svg",
+                        "brandColor": "#709727",
+                        "parameters": {
+                          "method": "POST",
+                          "uri": "https://api.opensanctions.org/match/default",
+                          "headers": {
+                            "Authorization": "ApiKey @{outputs(\u0027Get_secret\u0027)?[\u0027body/value\u0027]}",
+                            "Content-Type": "application/json"
+                          },
+                          "body": "{\n  \u0022queries\u0022: {\n    \u0022entity_1\u0022: {\n      \u0022schema\u0022: \u0022Company\u0022,\n      \u0022properties\u0022: {\n        \u0022name\u0022: [\n          \u0022@{triggerOutputs()?[\u0027body/text\u0027]}\u0022\n        ]\n      }\n    }\n  }\n}\n"
+                        },
+                        "description": "Make an HTTP request to any endpoint.",
+                        "parametersSchema": {
+                          "type": "object",
+                          "required": [
+                            "method",
+                            "uri"
+                          ],
+                          "properties": {
+                            "method": {
+                              "type": "string",
+                              "title": "Method",
+                              "description": "HTTP method",
+                              "enum": [
+                                "GET",
+                                "POST",
+                                "PUT",
+                                "PATCH",
+                                "DELETE",
+                                "HEAD",
+                                "OPTIONS"
+                              ],
+                              "default": "GET"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "title": "URI",
+                              "description": "Request URL"
+                            },
+                            "headers": {
+                              "type": "object",
+                              "title": "Headers",
+                              "description": "Request headers"
+                            },
+                            "queries": {
+                              "type": "object",
+                              "title": "Queries",
+                              "description": "Query parameters"
+                            },
+                            "body": {
+                              "title": "Body",
+                              "description": "Request body"
+                            },
+                            "authentication": {
+                              "type": "object",
+                              "title": "Authentication",
+                              "description": "Authentication configuration"
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-5d2a1756-da29-4cd6-8f56-233ca234e435",
+                    "name": "Respond to the agent",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 3183.938730853391,
+                      "y": -92.271334792122531
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "response",
+                        "operationName": "response",
+                        "displayName": "Respond to the agent",
+                        "category": "request",
+                        "categoryDisplayName": "Request",
+                        "iconUri": "",
+                        "brandColor": "",
+                        "parameters": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "title": "RiskScore",
+                                "type": "string",
+                                "x-ms-content-hint": "TEXT",
+                                "x-ms-dynamically-added": true
+                              },
+                              "text_1": {
+                                "title": "RiskCategory",
+                                "type": "string",
+                                "x-ms-content-hint": "TEXT",
+                                "x-ms-dynamically-added": true
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "text_1"
+                            ]
+                          },
+                          "body": {
+                            "text": "@{outputs(\u0027builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288\u0027)}",
+                            "text_1": "@{outputs(\u0027builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254\u0027)}"
+                          }
+                        },
+                        "description": "Respond to the calling agent with typed outputs.",
+                        "kind": "Skills"
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    },
+                    "selected": false,
+                    "dragging": false
+                  },
+                  {
+                    "id": "builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288",
+                    "name": "Compose - Risk Score",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 1569,
+                      "y": 0
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "composeNew",
+                        "operationName": "composeNew",
+                        "displayName": "Compose",
+                        "category": "providers/Microsoft.ProcessSimple/operationGroups/DataOperation",
+                        "categoryDisplayName": "Data Operations",
+                        "iconUri": "https://logicappsv2resources.blob.core.windows.net/icons/compose.svg",
+                        "brandColor": "#8c6cff",
+                        "parameters": {
+                          "inputs": "@{formatNumber(\r\n   mul(\r\n      float(body(\u0027builtinFunction-15c70e1c-acb7-478e-991f-63e46eea8e82\u0027)?[\u0027responses\u0027]?[\u0027entity_1\u0027]?[\u0027results\u0027]?[2]?[\u0027score\u0027]),\r\n      100\r\n   ),\r\n   \u00270.00\u0027\r\n)}"
+                        },
+                        "description": "Compose outputs from multiple actions into a single output.",
+                        "parametersSchema": {
+                          "type": "object",
+                          "required": [
+                            "inputs"
+                          ],
+                          "properties": {
+                            "inputs": {
+                              "type": "string",
+                              "title": "Inputs",
+                              "description": "Value to compose"
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254",
+                    "name": "Compose - Risk Category",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 1885,
+                      "y": 0
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "composeNew",
+                        "operationName": "composeNew",
+                        "displayName": "Compose",
+                        "category": "providers/Microsoft.ProcessSimple/operationGroups/DataOperation",
+                        "categoryDisplayName": "Data Operations",
+                        "iconUri": "https://logicappsv2resources.blob.core.windows.net/icons/compose.svg",
+                        "brandColor": "#8c6cff",
+                        "parameters": {
+                          "inputs": "@{if(\r\n   equals(float(outputs(\u0027builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288\u0027)),0),\r\n   \u0027No Match\u0027,\r\n   if(\r\n      greaterOrEquals(float(outputs(\u0027builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288\u0027)),90),\r\n      \u0027High Risk\u0027,\r\n      if(\r\n         greaterOrEquals(float(outputs(\u0027builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288\u0027)),70),\r\n         \u0027Medium Risk\u0027,\r\n         \u0027Low Risk\u0027\r\n      )\r\n   )\r\n)}"
+                        },
+                        "description": "Compose outputs from multiple actions into a single output.",
+                        "parametersSchema": {
+                          "type": "object",
+                          "required": [
+                            "inputs"
+                          ],
+                          "properties": {
+                            "inputs": {
+                              "type": "string",
+                              "title": "Inputs",
+                              "description": "Value to compose"
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-15c70e1c-acb7-478e-991f-63e46eea8e82",
+                    "name": "Parse JSON",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 1219,
+                      "y": 0
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "parsejson",
+                        "operationName": "composeNew",
+                        "displayName": "Parse JSON",
+                        "category": "providers/Microsoft.ProcessSimple/operationGroups/DataOperation",
+                        "categoryDisplayName": "Data Operations",
+                        "iconUri": "https://logicappsv2resources.blob.core.windows.net/icons/compose.svg",
+                        "brandColor": "#8c6cff",
+                        "parameters": {
+                          "content": "@{body(\u0027builtinFunction-ecfd575b-f4b6-4be6-ab86-00c18ae3efc2\u0027)}",
+                          "schema": "{\n    \u0022type\u0022: \u0022object\u0022,\n    \u0022properties\u0022: {\n        \u0022value\u0022: {\n            \u0022type\u0022: \u0022string\u0022\n        }\n    }\n}"
+                        },
+                        "description": "Parse JSON content to make it easier to access properties.",
+                        "parametersSchema": {
+                          "type": "object",
+                          "required": [
+                            "content"
+                          ],
+                          "properties": {
+                            "content": {
+                              "type": "string",
+                              "format": "textarea",
+                              "title": "Content",
+                              "description": "JSON content to parse"
+                            },
+                            "schema": {
+                              "type": "object",
+                              "x-ms-editor": "schema",
+                              "x-ms-visibility": "important",
+                              "title": "Schema",
+                              "description": "JSON schema for the content"
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "connector-43c69b11-65fe-4408-8c29-f14df1bb876b",
+                    "name": "List rows",
+                    "type": "connector",
+                    "version": 1,
+                    "position": {
+                      "x": 2201,
+                      "y": 0
+                    },
+                    "data": {
+                      "config": {
+                        "apiName": "shared_commondataserviceforapps",
+                        "displayName": "Microsoft Dataverse",
+                        "iconUri": "https://static.powerapps.com/resource/ppcr/releases/v1.0.1825/1.0.1825.4855/commondataserviceforapps/icon.png",
+                        "brandColor": "",
+                        "operationName": "ListRecords",
+                        "operationType": "OpenApiConnection",
+                        "parametersSchema": {
+                          "type": "object",
+                          "properties": {
+                            "x-ms-odata-metadata-full": {
+                              "type": "boolean",
+                              "title": "Return Full Metadata",
+                              "description": "The header parameter to customer to opt-in returning full odata metadata in response.",
+                              "x-ms-visibility": "advanced",
+                              "x-ms-property-name-alias": "x-ms-odata-metadata-full"
+                            },
+                            "entityName": {
+                              "type": "string",
+                              "title": "Table name",
+                              "x-ms-dynamic-list": {
+                                "operationId": "GetEntities",
+                                "parameters": {},
+                                "itemsPath": "value",
+                                "itemValuePath": "EntitySetName",
+                                "itemTitlePath": "DisplayCollectionName/UserLocalizedLabel/Label"
+                              },
+                              "description": "Choose a table",
+                              "minLength": 1,
+                              "x-ms-property-name-alias": "entityName"
+                            },
+                            "$select": {
+                              "type": "string",
+                              "title": "Select columns",
+                              "description": "Enter a comma-separated list of column unique names to limit which columns are listed",
+                              "x-ms-visibility": "important",
+                              "x-ms-property-name-alias": "$select"
+                            },
+                            "$filter": {
+                              "type": "string",
+                              "title": "Filter rows",
+                              "description": "Enter an OData style filter expression to limit which rows are listed",
+                              "x-ms-visibility": "important",
+                              "x-ms-property-name-alias": "$filter"
+                            },
+                            "$orderby": {
+                              "type": "string",
+                              "title": "Sort By",
+                              "description": "Columns to sort by in OData orderBy style (excluding lookups)",
+                              "x-ms-visibility": "important",
+                              "x-ms-property-name-alias": "$orderby"
+                            },
+                            "$expand": {
+                              "type": "string",
+                              "title": "Expand Query",
+                              "description": "Enter an Odata style expand query to list related rows",
+                              "x-ms-visibility": "advanced",
+                              "x-ms-property-name-alias": "$expand"
+                            },
+                            "fetchXml": {
+                              "type": "string",
+                              "title": "Fetch Xml Query",
+                              "description": "Enter a Fetch XML query for advanced customization",
+                              "x-ms-visibility": "important",
+                              "x-ms-property-name-alias": "fetchXml"
+                            },
+                            "$top": {
+                              "type": "integer",
+                              "title": "Row count",
+                              "format": "int32",
+                              "description": "Enter the number of rows to be listed (default = 5000)",
+                              "x-ms-visibility": "important",
+                              "x-ms-property-name-alias": "$top"
+                            },
+                            "$skiptoken": {
+                              "type": "string",
+                              "title": "Skip token",
+                              "description": "Enter the skip token obtained from a previous run to list rows from the next page",
+                              "x-ms-visibility": "advanced",
+                              "x-ms-property-name-alias": "$skiptoken"
+                            },
+                            "partitionId": {
+                              "type": "string",
+                              "title": "Partition ID",
+                              "description": "An option to specify the partitionId while retrieving data for NoSQL tables",
+                              "x-ms-visibility": "advanced",
+                              "x-ms-property-name-alias": "partitionId"
+                            }
+                          },
+                          "required": [
+                            "entityName"
+                          ]
+                        },
+                        "connectionName": "shared_commondataserviceforapps-1",
+                        "parameters": {
+                          "entityName": "bcm_kyc_cases",
+                          "$filter": "contains(entity_name,\u0027triggerOutputs()?[\u0027body/text\u0027]\u0027)"
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "bcm_assigned_agent_id": {
+                                      "type": "string",
+                                      "title": "assigned_agent_id",
+                                      "description": "",
+                                      "maxLength": 100,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_assigned_agent_id"
+                                    },
+                                    "_createdonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                      "type": "string",
+                                      "title": "Created By (Delegate) (Type)",
+                                      "description": "Unique identifier of the delegate user who created the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_createdonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                                    },
+                                    "_createdonbehalfby_value": {
+                                      "type": "string",
+                                      "title": "Created By (Delegate) (Value)",
+                                      "description": "Unique identifier of the delegate user who created the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_createdonbehalfby_value"
+                                    },
+                                    "_createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                      "type": "string",
+                                      "title": "Created By (Type)",
+                                      "description": "Unique identifier of the user who created the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                                    },
+                                    "_createdby_value": {
+                                      "type": "string",
+                                      "title": "Created By (Value)",
+                                      "description": "Unique identifier of the user who created the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_createdby_value"
+                                    },
+                                    "createdon": {
+                                      "type": "string",
+                                      "title": "Created On",
+                                      "format": "date-time",
+                                      "description": "Date and time when the record was created.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "createdon"
+                                    },
+                                    "bcm_entity_name": {
+                                      "type": "string",
+                                      "title": "entity_name",
+                                      "description": "",
+                                      "maxLength": 100,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_entity_name"
+                                    },
+                                    "bcm_entity_type": {
+                                      "type": "integer",
+                                      "title": "entity_type",
+                                      "x-ms-dynamic-list": {
+                                        "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                        "parameters": {
+                                          "entityName": {
+                                            "parameterReference": "entityName",
+                                            "required": true
+                                          },
+                                          "attributeMetadataId": {
+                                            "value": "533719ed-bc9c-f111-b8db-002248749827"
+                                          },
+                                          "type": {
+                                            "value": "Picklist"
+                                          }
+                                        },
+                                        "itemsPath": "value",
+                                        "itemValuePath": "value",
+                                        "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                      },
+                                      "format": "int32",
+                                      "description": "",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_entity_type"
+                                    },
+                                    "importsequencenumber": {
+                                      "type": "integer",
+                                      "title": "Import Sequence Number",
+                                      "format": "int32",
+                                      "description": "Sequence number of the import that created this record.",
+                                      "maximum": 2147483647,
+                                      "minimum": -2147483648,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "importsequencenumber"
+                                    },
+                                    "bcm_jurisdiction": {
+                                      "type": "string",
+                                      "title": "jurisdiction",
+                                      "description": "",
+                                      "maxLength": 100,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_jurisdiction"
+                                    },
+                                    "bcm_kyccaseid": {
+                                      "type": "string",
+                                      "title": "kyc case id",
+                                      "description": "",
+                                      "maxLength": 850,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_kyccaseid"
+                                    },
+                                    "bcm_kyc_caseid": {
+                                      "type": "string",
+                                      "title": "kyc_case",
+                                      "format": "guid",
+                                      "description": "Unique identifier for entity instances",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_kyc_caseid"
+                                    },
+                                    "_modifiedonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                      "type": "string",
+                                      "title": "Modified By (Delegate) (Type)",
+                                      "description": "Unique identifier of the delegate user who modified the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_modifiedonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                                    },
+                                    "_modifiedonbehalfby_value": {
+                                      "type": "string",
+                                      "title": "Modified By (Delegate) (Value)",
+                                      "description": "Unique identifier of the delegate user who modified the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_modifiedonbehalfby_value"
+                                    },
+                                    "_modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                      "type": "string",
+                                      "title": "Modified By (Type)",
+                                      "description": "Unique identifier of the user who modified the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                                    },
+                                    "_modifiedby_value": {
+                                      "type": "string",
+                                      "title": "Modified By (Value)",
+                                      "description": "Unique identifier of the user who modified the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_modifiedby_value"
+                                    },
+                                    "modifiedon": {
+                                      "type": "string",
+                                      "title": "Modified On",
+                                      "format": "date-time",
+                                      "description": "Date and time when the record was modified.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "modifiedon"
+                                    },
+                                    "@odata.id": {
+                                      "type": "string",
+                                      "title": "OData Id",
+                                      "description": "OData row id",
+                                      "x-ms-visibility": "important",
+                                      "x-ms-property-name-alias": "@odata.id"
+                                    },
+                                    "bcm_onboarding_batch_id": {
+                                      "type": "string",
+                                      "title": "onboarding_batch_id",
+                                      "description": "",
+                                      "maxLength": 100,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_onboarding_batch_id"
+                                    },
+                                    "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                      "type": "string",
+                                      "title": "Owner (Type)",
+                                      "description": "Owner Id",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                                    },
+                                    "_ownerid_value": {
+                                      "type": "string",
+                                      "title": "Owner (Value)",
+                                      "description": "Owner Id",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_ownerid_value"
+                                    },
+                                    "_owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                      "type": "string",
+                                      "title": "Owning Business Unit (Type)",
+                                      "description": "Unique identifier for the business unit that owns the record",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                                    },
+                                    "_owningbusinessunit_value": {
+                                      "type": "string",
+                                      "title": "Owning Business Unit (Value)",
+                                      "description": "Unique identifier for the business unit that owns the record",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_owningbusinessunit_value"
+                                    },
+                                    "_owningteam_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                      "type": "string",
+                                      "title": "Owning Team (Type)",
+                                      "description": "Unique identifier for the team that owns the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_owningteam_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                                    },
+                                    "_owningteam_value": {
+                                      "type": "string",
+                                      "title": "Owning Team (Value)",
+                                      "description": "Unique identifier for the team that owns the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_owningteam_value"
+                                    },
+                                    "_owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                      "type": "string",
+                                      "title": "Owning User (Type)",
+                                      "description": "Unique identifier for the user that owns the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                                    },
+                                    "_owninguser_value": {
+                                      "type": "string",
+                                      "title": "Owning User (Value)",
+                                      "description": "Unique identifier for the user that owns the record.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "_owninguser_value"
+                                    },
+                                    "overriddencreatedon": {
+                                      "type": "string",
+                                      "title": "Record Created On",
+                                      "format": "date-time",
+                                      "description": "Date and time that the record was migrated.",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "overriddencreatedon"
+                                    },
+                                    "bcm_risk_band": {
+                                      "type": "integer",
+                                      "title": "risk_band",
+                                      "x-ms-dynamic-list": {
+                                        "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                        "parameters": {
+                                          "entityName": {
+                                            "parameterReference": "entityName",
+                                            "required": true
+                                          },
+                                          "attributeMetadataId": {
+                                            "value": "af0785bd-729d-f111-b8dd-002248749827"
+                                          },
+                                          "type": {
+                                            "value": "Picklist"
+                                          }
+                                        },
+                                        "itemsPath": "value",
+                                        "itemValuePath": "value",
+                                        "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                      },
+                                      "format": "int32",
+                                      "description": "",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_risk_band"
+                                    },
+                                    "bcm_risk_score": {
+                                      "type": "integer",
+                                      "title": "risk_score",
+                                      "format": "int32",
+                                      "description": "",
+                                      "maximum": 2147483647,
+                                      "minimum": -2147483648,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_risk_score"
+                                    },
+                                    "bcm_status": {
+                                      "type": "integer",
+                                      "title": "status",
+                                      "x-ms-dynamic-list": {
+                                        "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                        "parameters": {
+                                          "entityName": {
+                                            "parameterReference": "entityName",
+                                            "required": true
+                                          },
+                                          "attributeMetadataId": {
+                                            "value": "b600ee8e-729d-f111-b8dd-002248749827"
+                                          },
+                                          "type": {
+                                            "value": "Picklist"
+                                          }
+                                        },
+                                        "itemsPath": "value",
+                                        "itemValuePath": "value",
+                                        "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                      },
+                                      "format": "int32",
+                                      "description": "",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "bcm_status"
+                                    },
+                                    "statecode": {
+                                      "type": "integer",
+                                      "title": "Status",
+                                      "x-ms-dynamic-list": {
+                                        "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                        "parameters": {
+                                          "entityName": {
+                                            "parameterReference": "entityName",
+                                            "required": true
+                                          },
+                                          "attributeMetadataId": {
+                                            "value": "67c995f0-e517-4305-a92e-3c25a9f4cc0f"
+                                          },
+                                          "type": {
+                                            "value": "State"
+                                          }
+                                        },
+                                        "itemsPath": "value",
+                                        "itemValuePath": "value",
+                                        "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                      },
+                                      "format": "int32",
+                                      "description": "Status of the kyc_case",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "statecode"
+                                    },
+                                    "statuscode": {
+                                      "type": "integer",
+                                      "title": "Status Reason",
+                                      "x-ms-dynamic-list": {
+                                        "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                        "parameters": {
+                                          "entityName": {
+                                            "parameterReference": "entityName",
+                                            "required": true
+                                          },
+                                          "attributeMetadataId": {
+                                            "value": "306ae426-89c5-4332-8017-057bfc5e97f6"
+                                          },
+                                          "type": {
+                                            "value": "Status"
+                                          }
+                                        },
+                                        "itemsPath": "value",
+                                        "itemValuePath": "value",
+                                        "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                      },
+                                      "format": "int32",
+                                      "description": "Reason for the status of the kyc_case",
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "statuscode"
+                                    },
+                                    "timezoneruleversionnumber": {
+                                      "type": "integer",
+                                      "title": "Time Zone Rule Version Number",
+                                      "format": "int32",
+                                      "description": "For internal use only.",
+                                      "maximum": 2147483647,
+                                      "minimum": -1,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "timezoneruleversionnumber"
+                                    },
+                                    "utcconversiontimezonecode": {
+                                      "type": "integer",
+                                      "title": "UTC Conversion Time Zone Code",
+                                      "format": "int32",
+                                      "description": "Time zone code that was in use when the record was created.",
+                                      "maximum": 2147483647,
+                                      "minimum": -1,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "utcconversiontimezonecode"
+                                    },
+                                    "versionnumber": {
+                                      "type": "integer",
+                                      "title": "Version Number",
+                                      "format": "int64",
+                                      "description": "Version Number",
+                                      "maximum": 9223372036854776000,
+                                      "minimum": -9223372036854776000,
+                                      "x-ms-visibility": "advanced",
+                                      "x-ms-property-name-alias": "versionnumber"
+                                    }
+                                  },
+                                  "required": []
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    },
+                    "selected": true
+                  },
+                  {
+                    "id": "ifElse-1422f354-d3c5-4d31-88c5-056d65c2a0e9",
+                    "name": "If/Else",
+                    "type": "ifElse",
+                    "version": 1,
+                    "position": {
+                      "x": 2517,
+                      "y": 0
+                    },
+                    "data": {
+                      "config": {
+                        "conditions": [
+                          {
+                            "id": "f89bdb32-1a3e-4f1f-8892-74473f7103b6",
+                            "name": "If",
+                            "expression": "{\n  \u0022and\u0022: [\n    {\n      \u0022greater\u0022: [\n        \u0022@length(outputs(\u0027List_rows\u0027)?[\u0027body/value\u0027])\u0022,\n        0\n      ]\n    }\n  ]\n}"
+                          }
+                        ]
+                      },
+                      "outcomes": [
+                        {
+                          "id": "condition:f89bdb32-1a3e-4f1f-8892-74473f7103b6",
+                          "label": "If"
+                        },
+                        {
+                          "id": "else",
+                          "label": "Else"
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 168
+                    }
+                  },
+                  {
+                    "id": "connector-20af835b-9d97-40d0-a417-5bb815e38e1c",
+                    "name": "Update a row",
+                    "type": "connector",
+                    "version": 1,
+                    "position": {
+                      "x": 2833,
+                      "y": -86
+                    },
+                    "data": {
+                      "config": {
+                        "apiName": "shared_commondataserviceforapps",
+                        "displayName": "Microsoft Dataverse",
+                        "iconUri": "https://static.powerapps.com/resource/ppcr/releases/v1.0.1825/1.0.1825.4855/commondataserviceforapps/icon.png",
+                        "brandColor": "",
+                        "operationName": "UpdateOnlyRecord",
+                        "connectionName": "shared_commondataserviceforapps",
+                        "operationType": "OpenApiConnection",
+                        "parametersSchema": {
+                          "type": "object",
+                          "properties": {
+                            "x-ms-odata-metadata-full": {
+                              "type": "boolean",
+                              "title": "Return Full Metadata",
+                              "description": "The header parameter to customer to opt-in returning full odata metadata in response.",
+                              "x-ms-visibility": "advanced",
+                              "x-ms-property-name-alias": "x-ms-odata-metadata-full"
+                            },
+                            "entityName": {
+                              "type": "string",
+                              "title": "Table name",
+                              "x-ms-dynamic-list": {
+                                "operationId": "GetEntities",
+                                "parameters": {},
+                                "itemsPath": "value",
+                                "itemValuePath": "EntitySetName",
+                                "itemTitlePath": "DisplayCollectionName/UserLocalizedLabel/Label"
+                              },
+                              "description": "Choose a table",
+                              "minLength": 1,
+                              "x-ms-property-name-alias": "entityName"
+                            },
+                            "recordId": {
+                              "type": "string",
+                              "title": "Row ID",
+                              "description": "Enter the row\u0027s globally unique identifier (GUID)",
+                              "minLength": 1,
+                              "x-ms-property-name-alias": "recordId"
+                            },
+                            "item": {
+                              "type": "object",
+                              "title": "Row Item",
+                              "x-ms-dynamic-properties": {
+                                "operationId": "GetMetadataForPatchEntity",
+                                "parameters": {
+                                  "entityName": {
+                                    "parameterReference": "entityName",
+                                    "required": true
+                                  }
+                                },
+                                "itemValuePath": "schema"
+                              },
+                              "description": "Row to update",
+                              "x-ms-property-name-alias": "item"
+                            }
+                          },
+                          "required": [
+                            "entityName",
+                            "item",
+                            "recordId"
+                          ]
+                        },
+                        "parameters": {
+                          "entityName": "bcm_kyc_cases",
+                          "recordId": "@{first(outputs(\u0027connector-43c69b11-65fe-4408-8c29-f14df1bb876b\u0027)?[\u0027body/value\u0027])?[\u0027kyc case id\u0027]}",
+                          "item/bcm_risk_band": "@outputs(\u0027builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254\u0027)",
+                          "item/bcm_risk_score": "@outputs(\u0027builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288\u0027)"
+                        },
+                        "resolvedDynamicSchemas": {
+                          "item": {
+                            "type": "object",
+                            "properties": {
+                              "bcm_assigned_agent_id": {
+                                "type": "string",
+                                "title": "assigned_agent_id",
+                                "description": "",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_assigned_agent_id"
+                              },
+                              "bcm_entity_name": {
+                                "type": "string",
+                                "title": "entity_name",
+                                "description": "",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_entity_name"
+                              },
+                              "bcm_entity_type": {
+                                "type": "integer",
+                                "title": "entity_type",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "533719ed-bc9c-f111-b8db-002248749827"
+                                    },
+                                    "type": {
+                                      "value": "Picklist"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_entity_type"
+                              },
+                              "bcm_jurisdiction": {
+                                "type": "string",
+                                "title": "jurisdiction",
+                                "description": "",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_jurisdiction"
+                              },
+                              "bcm_kyccaseid": {
+                                "type": "string",
+                                "title": "kyc case id",
+                                "description": "",
+                                "maxLength": 850,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_kyccaseid"
+                              },
+                              "bcm_onboarding_batch_id": {
+                                "type": "string",
+                                "title": "onboarding_batch_id",
+                                "description": "",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_onboarding_batch_id"
+                              },
+                              "ownerid@odata.bind": {
+                                "type": "string",
+                                "title": "Owner (Owners)",
+                                "description": "Owner Id",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "ownerid@odata.bind"
+                              },
+                              "bcm_risk_band": {
+                                "type": "integer",
+                                "title": "risk_band",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "af0785bd-729d-f111-b8dd-002248749827"
+                                    },
+                                    "type": {
+                                      "value": "Picklist"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_risk_band"
+                              },
+                              "bcm_risk_score": {
+                                "type": "integer",
+                                "title": "risk_score",
+                                "format": "int32",
+                                "description": "",
+                                "maximum": 2147483647,
+                                "minimum": -2147483648,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_risk_score"
+                              },
+                              "bcm_status": {
+                                "type": "integer",
+                                "title": "status",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "b600ee8e-729d-f111-b8dd-002248749827"
+                                    },
+                                    "type": {
+                                      "value": "Picklist"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "bcm_status"
+                              },
+                              "statecode": {
+                                "type": "integer",
+                                "title": "Status",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "67c995f0-e517-4305-a92e-3c25a9f4cc0f"
+                                    },
+                                    "type": {
+                                      "value": "State"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "Status of the kyc_case",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "statecode"
+                              },
+                              "statuscode": {
+                                "type": "integer",
+                                "title": "Status Reason",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "306ae426-89c5-4332-8017-057bfc5e97f6"
+                                    },
+                                    "type": {
+                                      "value": "Status"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "Reason for the status of the kyc_case",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "statuscode"
+                              },
+                              "timezoneruleversionnumber": {
+                                "type": "integer",
+                                "title": "Time Zone Rule Version Number",
+                                "format": "int32",
+                                "description": "For internal use only.",
+                                "maximum": 2147483647,
+                                "minimum": -1,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "timezoneruleversionnumber"
+                              },
+                              "utcconversiontimezonecode": {
+                                "type": "integer",
+                                "title": "UTC Conversion Time Zone Code",
+                                "format": "int32",
+                                "description": "Time zone code that was in use when the record was created.",
+                                "maximum": 2147483647,
+                                "minimum": -1,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "utcconversiontimezonecode"
+                              }
+                            },
+                            "required": []
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "properties": {
+                              "bcm_assigned_agent_id": {
+                                "type": "string",
+                                "title": "assigned_agent_id",
+                                "description": "",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_assigned_agent_id"
+                              },
+                              "_createdonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Created By (Delegate) (Type)",
+                                "description": "Unique identifier of the delegate user who created the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_createdonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_createdonbehalfby_value": {
+                                "type": "string",
+                                "title": "Created By (Delegate) (Value)",
+                                "description": "Unique identifier of the delegate user who created the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_createdonbehalfby_value"
+                              },
+                              "_createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Created By (Type)",
+                                "description": "Unique identifier of the user who created the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_createdby_value": {
+                                "type": "string",
+                                "title": "Created By (Value)",
+                                "description": "Unique identifier of the user who created the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_createdby_value"
+                              },
+                              "createdon": {
+                                "type": "string",
+                                "title": "Created On",
+                                "format": "date-time",
+                                "description": "Date and time when the record was created.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/createdon"
+                              },
+                              "bcm_entity_name": {
+                                "type": "string",
+                                "title": "entity_name",
+                                "description": "",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_entity_name"
+                              },
+                              "bcm_entity_type": {
+                                "type": "integer",
+                                "title": "entity_type",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "533719ed-bc9c-f111-b8db-002248749827"
+                                    },
+                                    "type": {
+                                      "value": "Picklist"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_entity_type"
+                              },
+                              "importsequencenumber": {
+                                "type": "integer",
+                                "title": "Import Sequence Number",
+                                "format": "int32",
+                                "description": "Sequence number of the import that created this record.",
+                                "maximum": 2147483647,
+                                "minimum": -2147483648,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/importsequencenumber"
+                              },
+                              "bcm_jurisdiction": {
+                                "type": "string",
+                                "title": "jurisdiction",
+                                "description": "",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_jurisdiction"
+                              },
+                              "bcm_kyccaseid": {
+                                "type": "string",
+                                "title": "kyc case id",
+                                "description": "",
+                                "maxLength": 850,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_kyccaseid"
+                              },
+                              "bcm_kyc_caseid": {
+                                "type": "string",
+                                "title": "kyc_case",
+                                "format": "guid",
+                                "description": "Unique identifier for entity instances",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_kyc_caseid"
+                              },
+                              "_modifiedonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Modified By (Delegate) (Type)",
+                                "description": "Unique identifier of the delegate user who modified the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_modifiedonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_modifiedonbehalfby_value": {
+                                "type": "string",
+                                "title": "Modified By (Delegate) (Value)",
+                                "description": "Unique identifier of the delegate user who modified the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_modifiedonbehalfby_value"
+                              },
+                              "_modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Modified By (Type)",
+                                "description": "Unique identifier of the user who modified the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_modifiedby_value": {
+                                "type": "string",
+                                "title": "Modified By (Value)",
+                                "description": "Unique identifier of the user who modified the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_modifiedby_value"
+                              },
+                              "modifiedon": {
+                                "type": "string",
+                                "title": "Modified On",
+                                "format": "date-time",
+                                "description": "Date and time when the record was modified.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/modifiedon"
+                              },
+                              "@odata.id": {
+                                "type": "string",
+                                "title": "OData Id",
+                                "description": "OData row id",
+                                "x-ms-visibility": "important",
+                                "x-ms-property-name-alias": "body/@odata.id"
+                              },
+                              "bcm_onboarding_batch_id": {
+                                "type": "string",
+                                "title": "onboarding_batch_id",
+                                "description": "",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_onboarding_batch_id"
+                              },
+                              "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Owner (Type)",
+                                "description": "Owner Id",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_ownerid_value": {
+                                "type": "string",
+                                "title": "Owner (Value)",
+                                "description": "Owner Id",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_ownerid_value"
+                              },
+                              "_owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Owning Business Unit (Type)",
+                                "description": "Unique identifier for the business unit that owns the record",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_owningbusinessunit_value": {
+                                "type": "string",
+                                "title": "Owning Business Unit (Value)",
+                                "description": "Unique identifier for the business unit that owns the record",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owningbusinessunit_value"
+                              },
+                              "_owningteam_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Owning Team (Type)",
+                                "description": "Unique identifier for the team that owns the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owningteam_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_owningteam_value": {
+                                "type": "string",
+                                "title": "Owning Team (Value)",
+                                "description": "Unique identifier for the team that owns the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owningteam_value"
+                              },
+                              "_owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Owning User (Type)",
+                                "description": "Unique identifier for the user that owns the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_owninguser_value": {
+                                "type": "string",
+                                "title": "Owning User (Value)",
+                                "description": "Unique identifier for the user that owns the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owninguser_value"
+                              },
+                              "overriddencreatedon": {
+                                "type": "string",
+                                "title": "Record Created On",
+                                "format": "date-time",
+                                "description": "Date and time that the record was migrated.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/overriddencreatedon"
+                              },
+                              "bcm_risk_band": {
+                                "type": "integer",
+                                "title": "risk_band",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "af0785bd-729d-f111-b8dd-002248749827"
+                                    },
+                                    "type": {
+                                      "value": "Picklist"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_risk_band"
+                              },
+                              "bcm_risk_score": {
+                                "type": "integer",
+                                "title": "risk_score",
+                                "format": "int32",
+                                "description": "",
+                                "maximum": 2147483647,
+                                "minimum": -2147483648,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_risk_score"
+                              },
+                              "bcm_status": {
+                                "type": "integer",
+                                "title": "status",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "b600ee8e-729d-f111-b8dd-002248749827"
+                                    },
+                                    "type": {
+                                      "value": "Picklist"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/bcm_status"
+                              },
+                              "statecode": {
+                                "type": "integer",
+                                "title": "Status",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "67c995f0-e517-4305-a92e-3c25a9f4cc0f"
+                                    },
+                                    "type": {
+                                      "value": "State"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "Status of the kyc_case",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/statecode"
+                              },
+                              "statuscode": {
+                                "type": "integer",
+                                "title": "Status Reason",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "306ae426-89c5-4332-8017-057bfc5e97f6"
+                                    },
+                                    "type": {
+                                      "value": "Status"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "Reason for the status of the kyc_case",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/statuscode"
+                              },
+                              "timezoneruleversionnumber": {
+                                "type": "integer",
+                                "title": "Time Zone Rule Version Number",
+                                "format": "int32",
+                                "description": "For internal use only.",
+                                "maximum": 2147483647,
+                                "minimum": -1,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/timezoneruleversionnumber"
+                              },
+                              "utcconversiontimezonecode": {
+                                "type": "integer",
+                                "title": "UTC Conversion Time Zone Code",
+                                "format": "int32",
+                                "description": "Time zone code that was in use when the record was created.",
+                                "maximum": 2147483647,
+                                "minimum": -1,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/utcconversiontimezonecode"
+                              },
+                              "versionnumber": {
+                                "type": "integer",
+                                "title": "Version Number",
+                                "format": "int64",
+                                "description": "Version Number",
+                                "maximum": 9223372036854776000,
+                                "minimum": -9223372036854776000,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/versionnumber"
+                              }
+                            },
+                            "required": []
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  }
+                ],
+                "edges": [
+                  {
+                    "id": "edge-start-d2ccb2d6-0a3a-4a3b-afe1-9f520fba718c-connector-2629b2e1-a6a2-4a90-b744-968b80fa32c4",
+                    "source": "start-d2ccb2d6-0a3a-4a3b-afe1-9f520fba718c",
+                    "target": "connector-2629b2e1-a6a2-4a90-b744-968b80fa32c4"
+                  },
+                  {
+                    "id": "edge-connector-2629b2e1-a6a2-4a90-b744-968b80fa32c4-builtinFunction-ecfd575b-f4b6-4be6-ab86-00c18ae3efc2",
+                    "source": "connector-2629b2e1-a6a2-4a90-b744-968b80fa32c4",
+                    "target": "builtinFunction-ecfd575b-f4b6-4be6-ab86-00c18ae3efc2"
+                  },
+                  {
+                    "id": "edge-builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288-builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254",
+                    "source": "builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288",
+                    "target": "builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254"
+                  },
+                  {
+                    "id": "edge-builtinFunction-ecfd575b-f4b6-4be6-ab86-00c18ae3efc2-builtinFunction-15c70e1c-acb7-478e-991f-63e46eea8e82",
+                    "source": "builtinFunction-ecfd575b-f4b6-4be6-ab86-00c18ae3efc2",
+                    "target": "builtinFunction-15c70e1c-acb7-478e-991f-63e46eea8e82"
+                  },
+                  {
+                    "id": "edge-builtinFunction-15c70e1c-acb7-478e-991f-63e46eea8e82-builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288",
+                    "source": "builtinFunction-15c70e1c-acb7-478e-991f-63e46eea8e82",
+                    "target": "builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288"
+                  },
+                  {
+                    "id": "edge-builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254-connector-43c69b11-65fe-4408-8c29-f14df1bb876b",
+                    "source": "builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254",
+                    "target": "connector-43c69b11-65fe-4408-8c29-f14df1bb876b"
+                  },
+                  {
+                    "id": "edge-connector-43c69b11-65fe-4408-8c29-f14df1bb876b-ifElse-1422f354-d3c5-4d31-88c5-056d65c2a0e9",
+                    "source": "connector-43c69b11-65fe-4408-8c29-f14df1bb876b",
+                    "target": "ifElse-1422f354-d3c5-4d31-88c5-056d65c2a0e9"
+                  },
+                  {
+                    "id": "edge-ifElse-1422f354-d3c5-4d31-88c5-056d65c2a0e9-condition:f89bdb32-1a3e-4f1f-8892-74473f7103b6-connector-20af835b-9d97-40d0-a417-5bb815e38e1c",
+                    "source": "ifElse-1422f354-d3c5-4d31-88c5-056d65c2a0e9",
+                    "target": "connector-20af835b-9d97-40d0-a417-5bb815e38e1c",
+                    "sourceHandle": "condition:f89bdb32-1a3e-4f1f-8892-74473f7103b6"
+                  },
+                  {
+                    "id": "edge-connector-20af835b-9d97-40d0-a417-5bb815e38e1c-output-builtinFunction-5d2a1756-da29-4cd6-8f56-233ca234e435-input",
+                    "source": "connector-20af835b-9d97-40d0-a417-5bb815e38e1c",
+                    "target": "builtinFunction-5d2a1756-da29-4cd6-8f56-233ca234e435",
+                    "sourceHandle": "output",
+                    "targetHandle": "input"
+                  }
+                ],
+                "connectionReferences": {
+                  "shared_keyvault": {
+                    "api": {
+                      "name": "shared_keyvault"
+                    },
+                    "connection": {
+                      "connectionReferenceLogicalName": "bcm_sharedkeyvault_040e1"
+                    },
+                    "runtimeSource": "embedded",
+                    "connectionName": "shared-keyvault-d6e1e7c4-728c-4241-a934-2b33ff34fd6d"
+                  },
+                  "shared_commondataserviceforapps-1": {
+                    "api": {
+                      "name": "shared_commondataserviceforapps"
+                    },
+                    "connection": {
+                      "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_a10ab4f3"
+                    },
+                    "runtimeSource": "invoker",
+                    "connectionName": "a51e67fcc03044a98cd9c290dcf3e9c5"
+                  },
+                  "shared_commondataserviceforapps": {
+                    "api": {
+                      "name": "shared_commondataserviceforapps"
+                    },
+                    "connection": {
+                      "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_e040a712"
+                    },
+                    "runtimeSource": "invoker",
+                    "connectionName": "shared-commondataser-2ce6e6e3-6d75-4e6a-aef9-b94dddafb890"
+                  }
+                }
+              },
+              "nodeActionMapping": {
+                "connector-2629b2e1-a6a2-4a90-b744-968b80fa32c4": [
+                  "Get_secret"
+                ],
+                "builtinFunction-ecfd575b-f4b6-4be6-ab86-00c18ae3efc2": [
+                  "HTTP"
+                ],
+                "builtinFunction-15c70e1c-acb7-478e-991f-63e46eea8e82": [
+                  "Parse_JSON"
+                ],
+                "builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288": [
+                  "Compose_-_Risk_Score"
+                ],
+                "builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254": [
+                  "Compose_-_Risk_Category"
+                ],
+                "connector-43c69b11-65fe-4408-8c29-f14df1bb876b": [
+                  "List_rows"
+                ],
+                "connector-20af835b-9d97-40d0-a417-5bb815e38e1c": [
+                  "Update_a_row"
+                ],
+                "builtinFunction-5d2a1756-da29-4cd6-8f56-233ca234e435": [
+                  "Respond_to_the_agent"
+                ],
+                "ifElse-1422f354-d3c5-4d31-88c5-056d65c2a0e9": [
+                  "If_Else"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_secret": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "secretName": "OpenSanctionsApiKey"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_keyvault",
+              "connectionName": "shared_keyvault",
+              "operationId": "GetSecret"
+            }
+          },
+          "metadata": {
+            "description": "Get secret",
+            "nodeId": "connector-2629b2e1-a6a2-4a90-b744-968b80fa32c4"
+          }
+        },
+        "HTTP": {
+          "type": "Http",
+          "inputs": {
+            "method": "POST",
+            "uri": "https://api.opensanctions.org/match/default",
+            "headers": {
+              "Authorization": "ApiKey @{outputs(\u0027Get_secret\u0027)?[\u0027body/value\u0027]}",
+              "Content-Type": "application/json"
+            },
+            "body": "{\n  \u0022queries\u0022: {\n    \u0022entity_1\u0022: {\n      \u0022schema\u0022: \u0022Company\u0022,\n      \u0022properties\u0022: {\n        \u0022name\u0022: [\n          \u0022@{triggerOutputs()?[\u0027body/text\u0027]}\u0022\n        ]\n      }\n    }\n  }\n}\n"
+          },
+          "runAfter": {
+            "Get_secret": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "HTTP",
+            "nodeId": "builtinFunction-ecfd575b-f4b6-4be6-ab86-00c18ae3efc2"
+          }
+        },
+        "Parse_JSON": {
+          "type": "ParseJson",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": "@{body(\u0027HTTP\u0027)}"
+          },
+          "runAfter": {
+            "HTTP": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Parse JSON",
+            "nodeId": "builtinFunction-15c70e1c-acb7-478e-991f-63e46eea8e82"
+          }
+        },
+        "Compose_-_Risk_Score": {
+          "type": "Compose",
+          "inputs": "@{formatNumber(\r\n   mul(\r\n      float(body(\u0027Parse_JSON\u0027)?[\u0027responses\u0027]?[\u0027entity_1\u0027]?[\u0027results\u0027]?[2]?[\u0027score\u0027]),\r\n      100\r\n   ),\r\n   \u00270.00\u0027\r\n)}",
+          "runAfter": {
+            "Parse_JSON": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Compose - Risk Score",
+            "nodeId": "builtinFunction-2ca8188f-2ce0-4acb-bcb6-be3d8c658288"
+          }
+        },
+        "Compose_-_Risk_Category": {
+          "type": "Compose",
+          "inputs": "@{if(\r\n   equals(float(outputs(\u0027Compose_-_Risk_Score\u0027)),0),\r\n   \u0027No Match\u0027,\r\n   if(\r\n      greaterOrEquals(float(outputs(\u0027Compose_-_Risk_Score\u0027)),90),\r\n      \u0027High Risk\u0027,\r\n      if(\r\n         greaterOrEquals(float(outputs(\u0027Compose_-_Risk_Score\u0027)),70),\r\n         \u0027Medium Risk\u0027,\r\n         \u0027Low Risk\u0027\r\n      )\r\n   )\r\n)}",
+          "runAfter": {
+            "Compose_-_Risk_Score": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Compose - Risk Category",
+            "nodeId": "builtinFunction-12f542f8-ba33-46ab-a812-396e584ac254"
+          }
+        },
+        "List_rows": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "bcm_kyc_cases",
+              "$filter": "contains(entity_name,\u0027triggerOutputs()?[\u0027body/text\u0027]\u0027)"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "connectionName": "shared_commondataserviceforapps-1",
+              "operationId": "ListRecords"
+            }
+          },
+          "runAfter": {
+            "Compose_-_Risk_Category": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "List rows",
+            "nodeId": "connector-43c69b11-65fe-4408-8c29-f14df1bb876b"
+          }
+        },
+        "If_Else": {
+          "type": "If",
+          "expression": {
+            "and": [
+              {
+                "greater": [
+                  "@length(outputs(\u0027List_rows\u0027)?[\u0027body/value\u0027])",
+                  0
+                ]
+              }
+            ]
+          },
+          "actions": {
+            "Update_a_row": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "bcm_kyc_cases",
+                  "recordId": "@{first(outputs(\u0027List_rows\u0027)?[\u0027body/value\u0027])?[\u0027kyc case id\u0027]}",
+                  "item/bcm_risk_band": "@outputs(\u0027Compose_-_Risk_Category\u0027)",
+                  "item/bcm_risk_score": "@outputs(\u0027Compose_-_Risk_Score\u0027)"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateOnlyRecord"
+                }
+              },
+              "metadata": {
+                "description": "Update a row",
+                "nodeId": "connector-20af835b-9d97-40d0-a417-5bb815e38e1c"
+              }
+            },
+            "Respond_to_the_agent": {
+              "type": "Response",
+              "kind": "Skills",
+              "inputs": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "title": "RiskScore",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    },
+                    "text_1": {
+                      "title": "RiskCategory",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    }
+                  },
+                  "required": [
+                    "text",
+                    "text_1"
+                  ]
+                },
+                "statusCode": 200,
+                "body": {
+                  "text": "@{outputs(\u0027Compose_-_Risk_Score\u0027)}",
+                  "text_1": "@{outputs(\u0027Compose_-_Risk_Category\u0027)}"
+                }
+              },
+              "runAfter": {
+                "Update_a_row": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "description": "Respond to the agent",
+                "nodeId": "builtinFunction-5d2a1756-da29-4cd6-8f56-233ca234e435"
+              }
+            }
+          },
+          "else": {
+            "actions": {}
+          },
+          "runAfter": {
+            "List_rows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "If/Else",
+            "nodeId": "ifElse-1422f354-d3c5-4d31-88c5-056d65c2a0e9"
+          }
+        }
+      },
+      "outputs": {},
+      "metadata": {
+        "telemetryMetadata": {
+          "creationSource": "WorkflowDesigner",
+          "modifiedSources": "WorkflowDesigner"
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

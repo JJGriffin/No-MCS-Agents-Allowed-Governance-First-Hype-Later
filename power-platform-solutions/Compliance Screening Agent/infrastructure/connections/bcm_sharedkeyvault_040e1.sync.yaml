@@ -1,0 +1,3 @@
+connectionReferences:
+  - connectionReferenceLogicalName: bcm_sharedkeyvault_040e1
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_keyvault

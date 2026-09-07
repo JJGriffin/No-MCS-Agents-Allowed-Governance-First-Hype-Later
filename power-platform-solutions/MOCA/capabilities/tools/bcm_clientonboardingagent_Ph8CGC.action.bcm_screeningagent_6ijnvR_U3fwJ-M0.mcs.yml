@@ -1,0 +1,8 @@
+mcs.metadata:
+  componentName: Compliance Screening Agent
+  description: Specialized screening service that enriches onboarding cases with company information from Companies House and performs sanctions, PEP, and watchlist screening through OpenSanctions. The agent returns structured risk findings and entity verification details, enabling compliance teams to make faster and more informed onboarding decisions.
+kind: ConnectedAgentTool
+historyType:
+  kind: ConversationHistory
+
+botSchemaName: bcm_screeningagent_6ijnvR

@@ -1,0 +1,26 @@
+mcs.metadata:
+  componentName: MOCA_Run_Company_Verification
+kind: WorkflowTool
+workflowId: a200dac7-cad3-abc0-6ad3-27e31e51aae7
+toolInputs:
+  - name: text
+    displayName: CompanyName
+    description: Please enter your input
+
+toolOutputs:
+  - name: text
+    displayName: companyNumber
+
+  - name: text_1
+    displayName: incorporationDate
+
+  - name: text_2
+    displayName: companyStatus
+
+  - name: text_3
+    displayName: registeredAddress
+
+connectionProperties:
+  $kind: ConnectionProperties
+  diagnostics:
+  mode: Invoker
