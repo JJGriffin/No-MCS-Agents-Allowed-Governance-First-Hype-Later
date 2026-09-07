@@ -264,7 +264,8 @@
                     "measured": {
                       "width": 240,
                       "height": 66
-                    }
+                    },
+                    "selected": false
                   },
                   {
                     "id": "builtinFunction-a1c5d5ce-bf30-443b-97ec-3698c1adda36",
@@ -477,7 +478,7 @@
                         "iconUri": "https://logicappsv2resources.blob.core.windows.net/icons/compose.svg",
                         "brandColor": "#8c6cff",
                         "parameters": {
-                          "inputs": "@{concat(\u0027Basic \u0027, base64(concat(\u0027REPLACE_WITH_KEYVAULT_SECRET_REFERENCE\u0027, \u0027:\u0027)))}"
+                          "inputs": "@{concat(\u0027Basic \u0027, base64(concat(\u0027YOUR_API_KEY\u0027, \u0027:\u0027)))}"
                         },
                         "description": "Compose outputs from multiple actions into a single output.",
                         "parametersSchema": {
@@ -508,7 +509,8 @@
                     "measured": {
                       "width": 240,
                       "height": 66
-                    }
+                    },
+                    "selected": true
                   }
                 ],
                 "edges": [
@@ -567,7 +569,7 @@
       "actions": {
         "Compose": {
           "type": "Compose",
-          "inputs": "@{concat(\u0027Basic \u0027, base64(concat(\u0027REPLACE_WITH_KEYVAULT_SECRET_REFERENCE\u0027, \u0027:\u0027)))}",
+          "inputs": "@{concat(\u0027Basic \u0027, base64(concat(\u0027YOUR_API_KEY\u0027, \u0027:\u0027)))}",
           "metadata": {
             "description": "Compose",
             "nodeId": "builtinFunction-ea9344a7-a055-48cc-943b-731066439fa0"
